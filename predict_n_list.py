@@ -15,6 +15,25 @@ list_n = []
 list_n_count = 0
 list_n_start = -1
 
+# Intialize and reset to begin at the time of each prediction call
+def init():
+    global number_of_list, list_1_start, list_1_updated, list_2_start, list_2_updated, list_3_start, list_3_updated
+    global list_n, list_n_count, list_n_start
+
+    list_1_start = -1
+    list_1_updated = []
+
+    list_2_start = -1
+    list_2_updated = []
+
+    list_3_start = -1
+    list_3_updated = []
+
+    list_n = []
+    list_n_count = 0
+    list_n_start = -1
+
+
 # This method will initialize intermil lists with deducting the initial value from all values in the list
 def init_updated_lists(list1, list2, list3):
 	
@@ -197,8 +216,14 @@ def func_predict_n_start(n, interim_firsts):
 # This is the main funcition that is responsible to generate the predicted list
 # Input: 3 lists in order of loop bound smaller to upper like 2 to 4 lists, and n to predict for n loop bounds
 # output: Dialated reuse distance list prediction analyzing from other 3 lists
-def generate_n_list(list1, list2, list3, n):
+def generate_n_list(lists, n):
     global list_n, list_n_start, list_n_count
+    # print("-->")
+    # print(lists)
+    init()
+    list1 = lists[0]
+    list2 = lists[1]
+    list3 = lists[2]
     init_updated_lists(list1, list2, list3)
     predict_n_list_size(n)
     
@@ -239,3 +264,57 @@ def generate_n_list(list1, list2, list3, n):
     # print(list_n)
 
     return list_n
+
+def set_common_numbers(list1, list2, list3, list_n, n):
+    for i in range(0, len(list1)):
+        diff = list2[i] - list1[i]
+        base = list1[i]
+        if (base + diff * 2) == list3[i]:
+            list_n[i] =  base + diff * (n-1)
+        diff = list2[len(list2) -1 - i] - list1[len(list1) -1 - i]
+        base = list1[len(list1) -1 - i]
+
+        if (base + diff * 2) == list3[len(list3) -1 - i]:
+            list_n[len(list_n) -1 - i] =  base + diff * (n-1)
+    
+    # print(list_n)
+    return list_n
+
+def fill_up_rest_follow_list_3(list_n, list3, n):
+    diff = -1
+    base = -1
+    starting_ind = -1
+    for index, value in enumerate(list_n):
+        if value == -1:
+            base = list_n[index-1]
+            diff = list3[index] - list3[index-1]
+            starting_ind = index
+            break
+    multipy_fact = 1
+    for i in range (starting_ind, len(list_n)):
+        if list_n[i] == -1:
+            list_n[i] = base + diff * multipy_fact
+        multipy_fact += 1
+    
+    return list_n
+
+def generate_dynamic_rd_count_list(unique_rds_count, n):
+    list1 = unique_rds_count[0]
+    list2 = unique_rds_count[1]
+    list3 = unique_rds_count[2]
+    list_n_size = -1
+
+    diff = len(list2) - len(list1)
+    if len(list3) == len(list1) + 2 * diff:
+        list_n_size = len(list1) + (n-1) * diff
+    if list_n_size == -1:
+        print("Barf: List sizes has no relation")
+        sys.exit(1)
+    list_n= [-1 for _ in range(list_n_size)]
+
+    list_n = set_common_numbers(list1, list2, list3, list_n, n)
+    list_n = fill_up_rest_follow_list_3(list_n, list3, n)
+    return list_n
+
+
+
