@@ -1,7 +1,3 @@
-# List 1: [7, 9, 10, 11],
-# List 2: [9, 12, 13, 14, 15],
-# List 3: [11, 15, 16, 17, 18, 19]
-
 import sys
 
 number_of_list = 3
@@ -9,10 +5,8 @@ number_of_list = 3
 list_1_start = -1
 list_1_updated = []
 
-
 list_2_start = -1
 list_2_updated = []
-
 
 list_3_start = -1
 list_3_updated = []
@@ -21,6 +15,7 @@ list_n = []
 list_n_count = 0
 list_n_start = -1
 
+# This method will initialize intermil lists with deducting the initial value from all values in the list
 def init_updated_lists(list1, list2, list3):
 	
     global list_1_updated, list_2_updated, list_3_updated
@@ -37,6 +32,9 @@ def init_updated_lists(list1, list2, list3):
     for index, rd in enumerate(list3):
         list_3_updated.append(list3[index]-list_3_start)
 
+# At this point, before calling this function
+# we know that we have to expend the list with maintaing incremental order with previous values
+# this function will fill out those numbers
 def fillout_rest_incremental(list_n_count, list_n):
     sz = len(list_n)
     diff = list_n[sz -1] - list_n[sz-1-1]
@@ -45,6 +43,8 @@ def fillout_rest_incremental(list_n_count, list_n):
         sz += 1
     return 
 
+# This function will fillout with linear connected numbers
+# Before calling this function, we have to know that the relationship between the numbers are linear
 def fillout_rest_linear(list_n_count, list_n):
     sz = len(list_n)
     diff = list_n[sz -1] - list_n[sz-1-1]
@@ -55,6 +55,11 @@ def fillout_rest_linear(list_n_count, list_n):
         i+=1
     return 
 
+# This method will check if the same indexed numbers of all the lists are linearly connected or not
+# For example, in the below case, we can say index 1 of all lists are linearly connected with index 0
+# list1[1] - list1[0] = 10
+# list2[1] - list2[0] = 12
+# list3[1] - list3[0] = 14
 def is_linear(same_indexed_nums, list_n_diff, n):
     diff = same_indexed_nums[1] - same_indexed_nums[0]
     for i in range(1, len(same_indexed_nums)):
@@ -65,7 +70,12 @@ def is_linear(same_indexed_nums, list_n_diff, n):
     
     # print("Numbers are linearly connected")
     return True
-    
+
+# This method will check if the same indexed numbers of all the lists are incrementally connected or not
+# For example, in the below case, we can say index 1 of all lists are linearly connected with index 0
+# list1[1] - list1[0] = 10
+# list2[1] - list2[0] = 10
+# list3[1] - list3[0] = 10    
 def is_constant(same_indexed_nums, list_n_diff, n):
     const = True
     val_0 = same_indexed_nums[0]
@@ -80,10 +90,13 @@ def is_constant(same_indexed_nums, list_n_diff, n):
     # print ("Numbers are incremental")
     return True
 
+# Finalizing list with adding the starting value
 def finalize_list(list_n, list_n_start):
     for index, value in enumerate(list_n):
         list_n[index] = list_n[index] + list_n_start
 
+# Rule 3: The Predicted list size will be somehow connected with the given small list sizes
+# this method will identify what will be the size of the list
 def predict_n_list_size(n):
 	
     global list_n_count, number_of_list
@@ -95,13 +108,13 @@ def predict_n_list_size(n):
         if (len(working_list) - len(prev_list)) != incremental_from_base:
             print("Barf: incremental is not the same")
             sys.exit(1)
-            list_n_count = -1
-            return
         prev_list = working_list
     # End of For loop
     list_n_count =  len(list_1_updated) + incremental_from_base * (n-1)
     return
 
+# Rule 2: Lists connected with their neighbours. Same index of different lists are connected eigher in linearly or incrementally
+# This method will predict the list based on neighbour list
 def predict_list_from_neighbour(list_n_count, list_n_start, interim_lists, n):
     global list_n
     out_list_interim = []
@@ -135,6 +148,9 @@ def predict_list_from_neighbour(list_n_count, list_n_start, interim_lists, n):
         # print(out_list_interim[i] )
     list_n = out_list_interim
 
+# Rule 1: As we predicted the list using rule 2 with neighbour, we have to verify the predicted
+# list correctness using same list connection. Numbers inside a list are connected.
+# this method will evaluate that relationship
 def verify_list_from_own_list_conn(list_n_count, list_n_start, interim_lists, n):
     global list_n
     list_n_sz = len(list_n)
@@ -162,6 +178,7 @@ def verify_list_from_own_list_conn(list_n_count, list_n_start, interim_lists, n)
         same_indexed_nums = []
     return incremental_coutner, linear_counter, is_last_one_incremental
 
+# This function will calculated the starting number of the predicted list
 def func_predict_n_start(n, interim_firsts):
     global list_n_start
 
@@ -177,48 +194,48 @@ def func_predict_n_start(n, interim_firsts):
     
     list_n_start = interim_firsts[0] + incremental*(n-1)
 
-list1 = [7, 9, 10, 11]
-print(list1)
-list2 = [9, 12, 13, 14, 15]
-print(list2)
-list3 = [11, 15, 16, 17, 18, 19]
-print(list3)
-n = 4
+# This is the main funcition that is responsible to generate the predicted list
+# Input: 3 lists in order of loop bound smaller to upper like 2 to 4 lists, and n to predict for n loop bounds
+# output: Dialated reuse distance list prediction analyzing from other 3 lists
+def generate_n_list(list1, list2, list3, n):
+    global list_n, list_n_start, list_n_count
+    init_updated_lists(list1, list2, list3)
+    predict_n_list_size(n)
+    
+    # print(f'Number of Items in {n}th List: {list_n_count}')
 
-init_updated_lists(list1, list2, list3)
-predict_n_list_size(n)
+    interim_lists = []
+    interim_lists.append(list_1_updated)
+    interim_lists.append(list_2_updated)
+    interim_lists.append(list_3_updated)
 
-# print(f'Number of Items in {n}th List: {list_n_count}')
+    interim_firsts = []
+    interim_firsts.append(list_1_start)
+    interim_firsts.append(list_2_start)
+    interim_firsts.append(list_3_start)
+        
 
-interim_lists = []
-interim_lists.append(list_1_updated)
-interim_lists.append(list_2_updated)
-interim_lists.append(list_3_updated)
+    # print(interim_lists)
 
-interim_firsts = []
-interim_firsts.append(list_1_start)
-interim_firsts.append(list_2_start)
-interim_firsts.append(list_3_start)
-
-# print(interim_lists)
-
-func_predict_n_start(n, interim_firsts)
+    func_predict_n_start(n, interim_firsts)
 
 
-# print(f'List starts with: {list_n_start}')
+    # print(f'List starts with: {list_n_start}')
 
-predict_list_from_neighbour(list_n_count, list_n_start, interim_lists, n)
-# print(list_n)
+    predict_list_from_neighbour(list_n_count, list_n_start, interim_lists, n)
+    # print(list_n)
 
-incremental_changes, linear_chnages, is_last_one_incremental = verify_list_from_own_list_conn(list_n_count, list_n_start, interim_lists, n)
+    incremental_changes, linear_chnages, is_last_one_incremental = verify_list_from_own_list_conn(list_n_count, list_n_start, interim_lists, n)
 
-if incremental_changes > linear_chnages and is_last_one_incremental: 
-    fillout_rest_incremental(list_n_count, list_n)
-elif linear_chnages > incremental_changes and not is_last_one_incremental:
-    fillout_rest_linear(list_n_count, list_n)
-else:
-    print("Step yet undecided")
+    if incremental_changes > linear_chnages and is_last_one_incremental: 
+        fillout_rest_incremental(list_n_count, list_n)
+    elif linear_chnages > incremental_changes and not is_last_one_incremental:
+        fillout_rest_linear(list_n_count, list_n)
+    else:
+        print("Step yet undecided")
 
-# print(list_n)
-finalize_list(list_n, list_n_start)
-print(list_n)
+    # print(list_n)
+    finalize_list(list_n, list_n_start)
+    # print(list_n)
+
+    return list_n
