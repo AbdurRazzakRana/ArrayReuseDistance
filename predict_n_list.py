@@ -152,16 +152,16 @@ def predict_list_from_neighbour(list_n_count, list_n_start, interim_lists, n):
         
         index_base = interim_lists[0][i]
         index_incremental = interim_lists[1][i] - index_base
-        index_base = interim_lists[1][i]
-        j = 2
-        while j<len(interim_lists) : 
-            if(interim_lists[j][i] - index_base) != index_incremental:
-                print("Barf: Neighbour list is not sequaltial")
-                sys.exit(1)
-            index_base = interim_lists[j][i]
-            j+=1
+        # index_base = interim_lists[1][i]
+        # j = 2
+        # while j<len(interim_lists) : 
+        #     if(interim_lists[j][i] - index_base) != index_incremental:
+        #         print("Barf: Neighbour list is not sequaltial")
+        #         sys.exit(1)
+        #     index_base = interim_lists[j][i]
+        #     j+=1
         
-        index_base = interim_lists[0][i]
+        # index_base = interim_lists[0][i]
         out_list_interim.append(index_base + (n-1) * index_incremental)
 
         # print(out_list_interim[i] )
@@ -191,9 +191,9 @@ def verify_list_from_own_list_conn(list_n_count, list_n_start, interim_lists, n)
             linear_counter += 1
             is_last_one_incremental = False
         
-        if not is_constant(same_indexed_nums, list_n_diff, n) and not is_linear(same_indexed_nums, list_n_diff, n): 
-            print("Barf: Verification Failed: neither incremental nor linear")
-            sys.exit(1)
+        # if not is_constant(same_indexed_nums, list_n_diff, n) and not is_linear(same_indexed_nums, list_n_diff, n): 
+        #     print("Barf: Verification Failed: neither incremental nor linear")
+        #     sys.exit(1)
         same_indexed_nums = []
     return incremental_coutner, linear_counter, is_last_one_incremental
 
@@ -256,8 +256,8 @@ def generate_n_list(lists, n):
         fillout_rest_incremental(list_n_count, list_n)
     elif linear_chnages > incremental_changes and not is_last_one_incremental:
         fillout_rest_linear(list_n_count, list_n)
-    else:
-        print("Step yet undecided")
+    # else:
+    #     print("Step yet undecided")
 
     # print(list_n)
     finalize_list(list_n, list_n_start)

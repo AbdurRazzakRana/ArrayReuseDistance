@@ -113,7 +113,7 @@ print("Predicted for j = 200, k = 300")
 dict_2_300 = {0:1207, 1:2401, 2:603, 3:1201, 4:598, 602:300, -1:904} # j = 2, k = 300
 dict_3_300 = {0:1810, 1:3602, 2:904, 3:1802, 4:897, 602:600, -1:1204} # j = 3, k = 300
 dict_4_300 = {0:2413, 1:4803, 2:1295, 3:2403, 4:1196, 602:900, -1:1504} # j = 4, k = 300
-predicted_rf = predict_dialated_rf_n_loop_bound(dict2, dict3, dict4, 199)
+predicted_rf = predict_dialated_rf_n_loop_bound(dict_2_300, dict_3_300, dict_4_300, 199)
 print(predicted_rf)
 print("Actual for j = 200, k = 300")
 actual_rf = {0:120601, 1:240199, 2:60201, 3:120199, 4:59800, 602:59700, -1:60304} # j = 2, k = 300
