@@ -31,3 +31,57 @@ Actual for k = 300
 
 ----->TEST CASE PASSED
 
+
+----->CASE 2
+
+
+    for(k=0;k<300;k++) {
+        A[0][k] = alpha * A[0][k];
+        B[0][k] = alpha;
+    }
+}
+Predicted for k = 300
+{0: 601, 1: 1201, 2: 899, -1: 603}
+Actual for k = 300
+{0: 601, 1: 1201, 2: 899, -1: 603}
+
+----->TEST CASE PASSED
+
+
+----->CASE 3
+
+
+    for(j=0;j<2;j++){
+        for(k=0;k<300;k++) {
+            A[0][k] = alpha * A[0][k];
+            B[j][k] = alpha;
+        }
+    }
+}
+Predicted for j = 2, k = 300
+Step yet undecided
+{0: 1207, 1: 2401, 2: 603, 3: 1201, 4: 598, 602: 300, -1: 904}
+Actual for j = 2, k = 300
+{0: 1207, 1: 2401, 2: 603, 3: 1201, 4: 598, 602: 300, -1: 904}
+
+----->TEST CASE PASSED
+
+
+----->CASE 4
+
+
+    for(j=0;j<200;j++){
+        for(k=0;k<300;k++) {
+            A[0][k] = alpha * A[0][k];
+            B[j][k] = alpha;
+        }
+    }
+}
+Predicted for j = 200, k = 300
+Step yet undecided
+{0: 807, 1: 1601, 2: 403, 3: 801, 4: 398, 402: 200, -1: 604}
+Actual for j = 200, k = 300
+{0: 120601, 1: 240199, 2: 60201, 3: 120199, 4: 59800, 602: 59700, -1: 60304}
+
+----->TEST CASE FAILED
+
