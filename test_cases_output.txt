@@ -1,14 +1,10 @@
 ----->CASE 1
 
-int main() {
-    int i,j,k, A[300][300],B[300][300], temp, alpha=10, x, a;
-    for(k=0;k<2;k++) {
+    for(k=0;k<5;k++) {
         A[0][k] = alpha * A[0][k];
         B[0][k] = alpha;
     }
-    return 0;
 }
-Mem Trace:  ['retval', 'alpha', 'k', '[2', 'k', 'alpha', 'k', 'arrayidx1', 'k', 'arrayidx4', 'alpha', 'k', 'arrayidx1', 'k', 'k', ']', 'k']
 
 Predicted for k = 5
 {0: 11, 1: 21, 2: 14, -1: 13}
@@ -22,6 +18,12 @@ Actual for k = 5
 
 ----->CASE 2
 
+
+    for(k=0;k<300;k++) {
+        A[0][k] = alpha * A[0][k];
+        B[0][k] = alpha;
+    }
+}
 Predicted for k = 300
 {0: 601, 1: 1201, 2: 899, -1: 603}
 Actual for k = 300
