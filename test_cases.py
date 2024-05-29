@@ -189,3 +189,33 @@ if predicted_rf == actual_rf:
  print("\n----->TEST CASE PASSED\n")
 else:
  print("\n----->TEST CASE FAILED\n")
+
+
+
+print("\n----->CASE 7\n")
+print("\n----->Polybench: 2mm : test 1\n")
+code = '''
+    int i,j,k, A[1000][1000],B[1000][1000];
+    int ni=1000, nk=700;
+
+    for (i = 0; i < ni; i++)
+        for (j = 0; j < nk; j++)
+        A[i][j] = (i*j) / ni;
+}'''
+print(code)
+print("Predicted for ni=1000, nk=700;")
+# base cases input rf collected from dynamic rd calculator
+dict_2_700 = {0: 2807, 1: 1400, 2: 4201, 3: 1407, 4: 2800, -1: 1405}
+dict_3_700 = {0: 4210, 1: 2100, 2: 6301, 3: 2111, 4: 4200, -1: 2105}
+dict_4_700 = {0: 5613, 1: 2800, 2: 8401, 3: 2815, 4: 5600, -1: 2805}
+predicted_rf = predict_dialated_rf_n_loop_bound(dict_2_700, dict_3_700, dict_4_700, 999)
+print(predicted_rf)
+print("")
+print("")
+print("Actual for i = 1000, j = 700")
+actual_rf = {0: 1403001, 1: 700000, 2: 2100001, 3: 703999, 4: 1400000, -1: 700005}
+print(actual_rf)
+if predicted_rf == actual_rf:
+ print("\n----->TEST CASE PASSED\n")
+else:
+ print("\n----->TEST CASE FAILED\n")
